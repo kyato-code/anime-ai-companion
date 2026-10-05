@@ -10,15 +10,22 @@ document.addEventListener('DOMContentLoaded', async () => {
       backgroundAlpha: 0
     });
 
-    // Muat model Cubism 2 lokal
-    const model = await PIXI.live2d.Live2DModel.from('assets/shizuku/shizuku.model.json');
+    // Menggunakan URL CDN sampel Mao Live2D Cubism 2 yang kompatibel
+    const modelUrl = 'https://cdn.jsdelivr.net/gh/guansss/pixi-live2d-display/test/assets/shizuku/shizuku.model.json';
+
+    const model = await PIXI.live2d.Live2DModel.from(modelUrl, {
+      autoInteract: true
+    });
+
     app.stage.addChild(model);
 
-    model.scale.set(0.2);
+    // Atur ukuran & posisi agar pas di tengah canvas
+    model.scale.set(0.15);
     model.x = app.renderer.width / 2;
-    model.y = app.renderer.height / 2;
+    model.y = app.renderer.height / 2 + 30;
     model.anchor.set(0.5, 0.5);
 
+    // Track pergerakan kursor mouse
     window.addEventListener('pointermove', (e) => {
       model.focus(e.clientX, e.clientY);
     });
@@ -28,7 +35,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     console.error("Gagal Render Live2D:", err);
   }
 
-  // Logika Chat System
+  // Integrasi Chatbox ke Backend FastAPI
   const sendBtn = document.getElementById('send-btn');
   const userInput = document.getElementById('user-input');
 
