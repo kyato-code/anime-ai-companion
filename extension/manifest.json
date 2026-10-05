@@ -10,8 +10,5 @@
   "permissions": [
     "storage",
     "activeTab"
-  ],
-  "content_security_policy": {
-    "extension_pages": "script-src 'self' 'unsafe-eval' https://cdn.jsdelivr.net; object-src 'self'"
-  }
+  ]
 }
