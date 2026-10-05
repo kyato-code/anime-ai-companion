@@ -23,40 +23,40 @@ document.addEventListener('DOMContentLoaded', () => {
     mouseY = e.clientY - rect.top;
   });
 
-  // Titik Koordinat Mata & Mulut Kucing pada Gambar
   function draw() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
     const leftEye = { x: canvas.width * 0.38, y: canvas.height * 0.44 };
     const rightEye = { x: canvas.width * 0.62, y: canvas.height * 0.44 };
 
-    // Hitung offset gerakan pupil
     function getPupilOffset(eye) {
       const dx = mouseX - eye.x;
       const dy = mouseY - eye.y;
       const dist = Math.hypot(dx, dy);
-      const maxDist = 4;
+      const maxDist = 3;
       const angle = Math.atan2(dy, dx);
-      const move = Math.min(dist / 30, maxDist);
+      const move = Math.min(dist / 35, maxDist);
       return { x: Math.cos(angle) * move, y: Math.sin(angle) * move };
     }
 
     const offL = getPupilOffset(leftEye);
     const offR = getPupilOffset(rightEye);
 
-    // Gambar pupil halus di dalam mata
+    // Pupil Mata Halus
     ctx.fillStyle = '#3a2e2b';
     ctx.beginPath();
-    ctx.ellipse(leftEye.x + offL.x, leftEye.y + offL.y, 4, 2, 0, 0, Math.PI * 2);
-    ctx.ellipse(rightEye.x + offR.x, rightEye.y + offR.y, 4, 2, 0, 0, Math.PI * 2);
+    ctx.ellipse(leftEye.x + offL.x, leftEye.y + offL.y, 3, 2, 0, 0, Math.PI * 2);
+    ctx.ellipse(rightEye.x + offR.x, rightEye.y + offR.y, 3, 2, 0, 0, Math.PI * 2);
     ctx.fill();
 
-    // Animasi Mulut saat AI membalas
-    if (isTalking && Math.floor(Date.now() / 150) % 2 === 0) {
-      ctx.fillStyle = '#ffb7c5';
+    // Animasi Mulut Minimalis & Natural (Garis Senyum bergerak sedikit)
+    if (isTalking) {
+      const talkOffset = (Math.sin(Date.now() / 100) * 1.5);
+      ctx.strokeStyle = '#3a2e2b';
+      ctx.lineWidth = 1.5;
       ctx.beginPath();
-      ctx.ellipse(canvas.width * 0.5, canvas.height * 0.49, 5, 4, 0, 0, Math.PI * 2);
-      ctx.fill();
+      ctx.arc(canvas.width * 0.5, canvas.height * 0.485 + (talkOffset * 0.3), 3, 0, Math.PI);
+      ctx.stroke();
     }
 
     requestAnimationFrame(draw);
@@ -83,7 +83,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const loadingDiv = document.createElement('div');
     loadingDiv.classList.add('message', 'bot-message');
     loadingDiv.id = 'loading-msg';
-    loadingDiv.innerText = 'Kucing sedang mengetik...';
+    loadingDiv.innerText = 'Kucing sedang ngetik...';
     chatHistory.appendChild(loadingDiv);
     chatHistory.scrollTop = chatHistory.scrollHeight;
 
@@ -100,7 +100,7 @@ document.addEventListener('DOMContentLoaded', () => {
       document.getElementById('loading-msg')?.remove();
       
       appendMessage('bot', data.reply);
-      setTimeout(() => { isTalking = false; }, 2500);
+      setTimeout(() => { isTalking = false; }, 2000);
     } catch (err) {
       document.getElementById('loading-msg')?.remove();
       appendMessage('bot', 'Meow... Backend AI offline.');

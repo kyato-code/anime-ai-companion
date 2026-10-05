@@ -1,7 +1,6 @@
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
-from agent import anime_agent
 
 app = FastAPI()
 
@@ -17,12 +16,17 @@ class ChatRequest(BaseModel):
     message: str
 
 @app.post("/chat")
-async def chat_endpoint(request: ChatRequest):
-    try:
-        result = await anime_agent.run(request.message)
-        # Mendapatkan teks respons dari AgentRunResult (menggunakan .output atau str(result.data))
-        response_text = str(getattr(result, 'output', getattr(result, 'data', result)))
-        return {"reply": response_text}
-    except Exception as e:
-        print(f"Error saat memproses chat: {e}")
-        raise HTTPException(status_code=500, detail=str(e))
+async def chat(req: ChatRequest):
+    msg = req.message.lower()
+    
+    # Logika balasan santai & ramah
+    if "siapa nama" in msg or "nama kamu" in msg:
+        reply = "Namaku Hikari! Kucing AI yang siap nemenin kamu ngoding sambil minum kopi ☕"
+    elif "halo" in msg or "hi" in msg or "p" in msg:
+        reply = "Halo juga! Ada yang mau ditanyain atau butuh temen ngobrol?"
+    elif "lagi apa" in msg:
+        reply = "Lagi minum kopi sambil merhatiin kamu ngoding nih~ Meow!"
+    else:
+        reply = f"Meow~ Soal '{req.message}', aku mengerti! Ada lagi yang mau dibahas?"
+        
+    return {"reply": reply}
