@@ -1,0 +1,17 @@
+{
+  "manifest_version": 3,
+  "name": "Anime AI Companion",
+  "version": "1.0.0",
+  "description": "Live2D Anime Mascot dengan Interaksi Mouse dan AI Agent",
+  "action": {
+    "default_popup": "index.html",
+    "default_title": "Anime AI Companion"
+  },
+  "permissions": [
+    "storage",
+    "activeTab"
+  ],
+  "content_security_policy": {
+    "extension_pages": "script-src 'self' 'unsafe-eval' https://cdn.jsdelivr.net; object-src 'self'"
+  }
+}
