@@ -7,12 +7,21 @@
 </head>
 <body>
   <div id="companion-container">
-    <div id="avatar-box">
-      <!-- Karakter Anime Bertema Web & Interaktif -->
-      <img id="character-img" src="https://api.dicebear.com/7.x/bottts/svg?seed=Hikari" alt="Hikari Avatar" />
+    <!-- Area Karakter Anime -->
+    <div id="avatar-container">
+      <img id="character-img" src="https://images.fineartamerica.com/images/interactive/png/anime-character.png" alt="Hikari" />
     </div>
-    <div id="chat-box">
-      <input type="text" id="user-input" placeholder="Ketik pesan..." />
+
+    <!-- Area Balasan Chat Bubble -->
+    <div id="chat-history">
+      <div class="message bot-message">
+        <span>Konnichiwa! Aku Hikari. Ada yang bisa kubantu hari ini?</span>
+      </div>
+    </div>
+
+    <!-- Input Box -->
+    <div id="chat-input-area">
+      <input type="text" id="user-input" placeholder="Ketik pesan untuk Hikari..." />
       <button id="send-btn">Kirim</button>
     </div>
   </div>
