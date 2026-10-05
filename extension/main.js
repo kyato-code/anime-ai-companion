@@ -1,35 +1,46 @@
-const { Application, live2d } = PIXI;
+const { Application } = PIXI;
 
 (async function () {
-  const app = new Application({
-    view: document.getElementById('live2d-canvas'),
-    autoStart: true,
-    resizeTo: window,
-    transparent: true
-  });
+  try {
+    const canvas = document.getElementById('live2d-canvas');
+    
+    const app = new Application({
+      view: canvas,
+      autoStart: true,
+      resizeTo: canvas,
+      transparent: true,
+      backgroundAlpha: 0
+    });
 
-  const modelUrl = 'https://cdn.jsdelivr.net/gh/guansss/pixi-live2d-display/test/assets/haru/haru_greeter_t03.model3.json';
+    // Model Live2D publik alternatif yang stabil
+    const modelUrl = 'https://raw.githubusercontent.com/guansss/pixi-live2d-display/master/test/assets/haru/haru_greeter_t03.model3.json';
 
-  const model = await PIXI.live2d.Live2DModel.from(modelUrl);
-  app.stage.addChild(model);
+    const model = await PIXI.live2d.Live2DModel.from(modelUrl);
+    app.stage.addChild(model);
 
-  model.x = app.renderer.width / 2;
-  model.y = app.renderer.height / 2;
-  model.rotation = 0;
-  model.scale.set(0.15);
-  model.anchor.set(0.5, 0.5);
+    // Atur skala dan posisi pas di tengah canvas
+    model.scale.set(0.1);
+    model.x = app.renderer.width / 2;
+    model.y = app.renderer.height / 2;
+    model.anchor.set(0.5, 0.5);
 
-  model.on('hit', (hitAreas) => {
-    if (hitAreas.includes('body')) {
-      model.motion('tap_body');
-    }
-  });
+    // Interaksi Mouse Tracking
+    window.addEventListener('pointermove', (event) => {
+      model.focus(event.clientX, event.clientY);
+    });
 
-  window.addEventListener('pointermove', (event) => {
-    model.focus(event.clientX, event.clientY);
-  });
+    // Tap Animation
+    model.on('hit', (hitAreas) => {
+      if (hitAreas.includes('body')) {
+        model.motion('tap_body');
+      }
+    });
 
-  // Integrasi Chatbox dengan Backend AI Server
+  } catch (err) {
+    console.error("Gagal memuat model Live2D:", err);
+  }
+
+  // Integrasi Chatbox ke Backend
   const sendBtn = document.getElementById('send-btn');
   const userInput = document.getElementById('user-input');
 
