@@ -1,10 +1,8 @@
-const { Application, live2d } = PIXI;
-
-(async function () {
+document.addEventListener('DOMContentLoaded', async () => {
+  const canvas = document.getElementById('live2d-canvas');
+  
   try {
-    const canvas = document.getElementById('live2d-canvas');
-    
-    const app = new Application({
+    const app = new PIXI.Application({
       view: canvas,
       autoStart: true,
       resizeTo: canvas,
@@ -12,26 +10,25 @@ const { Application, live2d } = PIXI;
       backgroundAlpha: 0
     });
 
-    // Model Live2D Haru
-    const modelUrl = 'https://raw.githubusercontent.com/guansss/pixi-live2d-display/master/test/assets/haru/haru_greeter_t03.model3.json';
-
-    const model = await PIXI.live2d.Live2DModel.from(modelUrl);
+    // Muat model Cubism 2 lokal
+    const model = await PIXI.live2d.Live2DModel.from('assets/shizuku/shizuku.model.json');
     app.stage.addChild(model);
 
-    model.scale.set(0.08);
+    model.scale.set(0.2);
     model.x = app.renderer.width / 2;
-    model.y = app.renderer.height / 2 + 50;
+    model.y = app.renderer.height / 2;
     model.anchor.set(0.5, 0.5);
 
-    window.addEventListener('pointermove', (event) => {
-      model.focus(event.clientX, event.clientY);
+    window.addEventListener('pointermove', (e) => {
+      model.focus(e.clientX, e.clientY);
     });
 
+    console.log("Model Live2D berhasil dimuat!");
   } catch (err) {
-    console.error("Gagal memuat model Live2D:", err);
+    console.error("Gagal Render Live2D:", err);
   }
 
-  // Integrasi Chatbox ke Backend
+  // Logika Chat System
   const sendBtn = document.getElementById('send-btn');
   const userInput = document.getElementById('user-input');
 
@@ -59,4 +56,4 @@ const { Application, live2d } = PIXI;
   userInput.addEventListener('keypress', (e) => {
     if (e.key === 'Enter') sendMessage();
   });
-})();
+});
