@@ -1,4 +1,4 @@
-const { Application } = PIXI;
+const { Application, live2d } = PIXI;
 
 (async function () {
   try {
@@ -12,28 +12,19 @@ const { Application } = PIXI;
       backgroundAlpha: 0
     });
 
-    // Model Live2D publik alternatif yang stabil
+    // Model Live2D Haru
     const modelUrl = 'https://raw.githubusercontent.com/guansss/pixi-live2d-display/master/test/assets/haru/haru_greeter_t03.model3.json';
 
     const model = await PIXI.live2d.Live2DModel.from(modelUrl);
     app.stage.addChild(model);
 
-    // Atur skala dan posisi pas di tengah canvas
-    model.scale.set(0.1);
+    model.scale.set(0.08);
     model.x = app.renderer.width / 2;
-    model.y = app.renderer.height / 2;
+    model.y = app.renderer.height / 2 + 50;
     model.anchor.set(0.5, 0.5);
 
-    // Interaksi Mouse Tracking
     window.addEventListener('pointermove', (event) => {
       model.focus(event.clientX, event.clientY);
-    });
-
-    // Tap Animation
-    model.on('hit', (hitAreas) => {
-      if (hitAreas.includes('body')) {
-        model.motion('tap_body');
-      }
     });
 
   } catch (err) {
