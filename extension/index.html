@@ -8,29 +8,13 @@
 <body>
   <div id="companion-container">
     <div id="avatar-container">
-      <!-- Gambar Latar Belakang Kucing Kopi & Komputer -->
-      <img id="bg-cat" src="assets/cat.jpg" alt="Cat Companion" />
-
-      <!-- Layer Overlay Interaktif untuk Mata dan Mulut -->
-      <svg id="interactive-overlay" viewBox="0 0 300 300" xmlns="http://www.w3.org/2000/svg">
-        <!-- Mata Kiri & Pupil Interaktif -->
-        <g id="left-eye">
-          <ellipse cx="112" cy="132" rx="14" ry="4" fill="#3a2e2b"/>
-          <ellipse id="pupil-left" cx="112" cy="132" rx="6" ry="3" fill="#ffffff"/>
-        </g>
-
-        <!-- Mata Kanan & Pupil Interaktif -->
-        <g id="right-eye">
-          <ellipse cx="188" cy="132" rx="14" ry="4" fill="#3a2e2b"/>
-          <ellipse id="pupil-right" cx="188" cy="132" rx="6" ry="3" fill="#ffffff"/>
-        </g>
-
-        <!-- Mulut Interaktif -->
-        <path id="cat-mouth" d="M 144 146 Q 150 150 156 146" fill="none" stroke="#3a2e2b" stroke-width="3" stroke-linecap="round"/>
-      </svg>
+      <div class="character-card">
+        <img id="bg-cat" src="assets/cat.jpg" alt="Cat Companion" />
+        <canvas id="eye-canvas"></canvas>
+      </div>
     </div>
 
-    <!-- Chat Box -->
+    <!-- Chat Box UI -->
     <div id="chat-history">
       <div class="message bot-message">
         <span>Meow! Kopi udah siap, yuk lanjut ngoding! ☕</span>
@@ -38,7 +22,7 @@
     </div>
 
     <div id="chat-input-area">
-      <input type="text" id="user-input" placeholder="Ketik pesan..." />
+      <input type="text" id="user-input" placeholder="Ketik pesan untuk Kucing..." />
       <button id="send-btn">Kirim</button>
     </div>
   </div>

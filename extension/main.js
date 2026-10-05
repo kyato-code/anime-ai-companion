@@ -3,46 +3,66 @@ document.addEventListener('DOMContentLoaded', () => {
   const userInput = document.getElementById('user-input');
   const chatHistory = document.getElementById('chat-history');
   
-  const pupilLeft = document.getElementById('pupil-left');
-  const pupilRight = document.getElementById('pupil-right');
-  const catMouth = document.getElementById('cat-mouth');
+  const canvas = document.getElementById('eye-canvas');
+  const ctx = canvas.getContext('2d');
+  const card = document.querySelector('.character-card');
 
-  // Gerakan Mata Mengikuti Mouse
+  function resizeCanvas() {
+    canvas.width = card.clientWidth;
+    canvas.height = card.clientHeight;
+  }
+  resizeCanvas();
+
+  let mouseX = canvas.width / 2;
+  let mouseY = canvas.height / 2;
+  let isTalking = false;
+
   window.addEventListener('mousemove', (e) => {
-    const rect = document.getElementById('avatar-container').getBoundingClientRect();
-    const centerX = rect.left + rect.width / 2;
-    const centerY = rect.top + rect.height / 2;
-
-    const angle = Math.atan2(e.clientY - centerY, e.clientX - centerX);
-    const distance = Math.min(4, Math.hypot(e.clientX - centerX, e.clientY - centerY) / 30);
-
-    const moveX = Math.cos(angle) * distance;
-    const moveY = Math.sin(angle) * distance;
-
-    pupilLeft.setAttribute('transform', `translate(${moveX}, ${moveY})`);
-    pupilRight.setAttribute('transform', `translate(${moveX}, ${moveY})`);
+    const rect = canvas.getBoundingClientRect();
+    mouseX = e.clientX - rect.left;
+    mouseY = e.clientY - rect.top;
   });
 
-  // Animasi Mulut Berbicara
-  function startTalking() {
-    let open = false;
-    const talkInterval = setInterval(() => {
-      open = !open;
-      if (open) {
-        catMouth.setAttribute('d', 'M 144 146 Q 150 156 156 146 Z');
-        catMouth.setAttribute('fill', '#ffb7c5');
-      } else {
-        catMouth.setAttribute('d', 'M 144 146 Q 150 150 156 146');
-        catMouth.setAttribute('fill', 'none');
-      }
-    }, 150);
+  // Titik Koordinat Mata & Mulut Kucing pada Gambar
+  function draw() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-    return () => {
-      clearInterval(talkInterval);
-      catMouth.setAttribute('d', 'M 144 146 Q 150 150 156 146');
-      catMouth.setAttribute('fill', 'none');
-    };
+    const leftEye = { x: canvas.width * 0.38, y: canvas.height * 0.44 };
+    const rightEye = { x: canvas.width * 0.62, y: canvas.height * 0.44 };
+
+    // Hitung offset gerakan pupil
+    function getPupilOffset(eye) {
+      const dx = mouseX - eye.x;
+      const dy = mouseY - eye.y;
+      const dist = Math.hypot(dx, dy);
+      const maxDist = 4;
+      const angle = Math.atan2(dy, dx);
+      const move = Math.min(dist / 30, maxDist);
+      return { x: Math.cos(angle) * move, y: Math.sin(angle) * move };
+    }
+
+    const offL = getPupilOffset(leftEye);
+    const offR = getPupilOffset(rightEye);
+
+    // Gambar pupil halus di dalam mata
+    ctx.fillStyle = '#3a2e2b';
+    ctx.beginPath();
+    ctx.ellipse(leftEye.x + offL.x, leftEye.y + offL.y, 4, 2, 0, 0, Math.PI * 2);
+    ctx.ellipse(rightEye.x + offR.x, rightEye.y + offR.y, 4, 2, 0, 0, Math.PI * 2);
+    ctx.fill();
+
+    // Animasi Mulut saat AI membalas
+    if (isTalking && Math.floor(Date.now() / 150) % 2 === 0) {
+      ctx.fillStyle = '#ffb7c5';
+      ctx.beginPath();
+      ctx.ellipse(canvas.width * 0.5, canvas.height * 0.49, 5, 4, 0, 0, Math.PI * 2);
+      ctx.fill();
+    }
+
+    requestAnimationFrame(draw);
   }
+
+  draw();
 
   function appendMessage(sender, text) {
     const msgDiv = document.createElement('div');
@@ -63,11 +83,11 @@ document.addEventListener('DOMContentLoaded', () => {
     const loadingDiv = document.createElement('div');
     loadingDiv.classList.add('message', 'bot-message');
     loadingDiv.id = 'loading-msg';
-    loadingDiv.innerText = 'Ngetik balasan...';
+    loadingDiv.innerText = 'Kucing sedang mengetik...';
     chatHistory.appendChild(loadingDiv);
     chatHistory.scrollTop = chatHistory.scrollHeight;
 
-    const stopTalking = startTalking();
+    isTalking = true;
 
     try {
       const response = await fetch('http://localhost:8000/chat', {
@@ -80,11 +100,11 @@ document.addEventListener('DOMContentLoaded', () => {
       document.getElementById('loading-msg')?.remove();
       
       appendMessage('bot', data.reply);
-      setTimeout(() => stopTalking(), 2500);
+      setTimeout(() => { isTalking = false; }, 2500);
     } catch (err) {
       document.getElementById('loading-msg')?.remove();
-      appendMessage('bot', 'Backend offline.');
-      stopTalking();
+      appendMessage('bot', 'Meow... Backend AI offline.');
+      isTalking = false;
     }
   }
 
