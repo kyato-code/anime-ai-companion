@@ -28,4 +28,33 @@ const { Application, live2d } = PIXI;
   window.addEventListener('pointermove', (event) => {
     model.focus(event.clientX, event.clientY);
   });
+
+  // Integrasi Chatbox dengan Backend AI Server
+  const sendBtn = document.getElementById('send-btn');
+  const userInput = document.getElementById('user-input');
+
+  async function sendMessage() {
+    const text = userInput.value.trim();
+    if (!text) return;
+
+    userInput.value = 'Berpikir...';
+    try {
+      const response = await fetch('http://localhost:8000/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ message: text })
+      });
+      const data = await response.json();
+      alert('Hikari: ' + data.reply);
+    } catch (err) {
+      alert('Gagal terhubung ke backend AI.');
+    } finally {
+      userInput.value = '';
+    }
+  }
+
+  sendBtn.addEventListener('click', sendMessage);
+  userInput.addEventListener('keypress', (e) => {
+    if (e.key === 'Enter') sendMessage();
+  });
 })();
