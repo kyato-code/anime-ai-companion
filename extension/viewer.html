@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <style>
+    body, html { margin: 0; padding: 0; width: 100%; height: 100%; overflow: hidden; background: transparent; }
+    canvas { width: 100%; height: 100%; display: block; }
+  </style>
+  <script src="live2dcubismcore.min.js"></script>
+  <script src="pixi.min.js"></script>
+  <script src="pixi-live2d.min.js"></script>
+</head>
+<body>
+  <canvas id="canvas"></canvas>
+  <script>
+    window.addEventListener('DOMContentLoaded', async () => {
+      try {
+        const canvas = document.getElementById('canvas');
+        const app = new PIXI.Application({
+          view: canvas,
+          autoStart: true,
+          resizeTo: window,
+          transparent: true,
+          backgroundAlpha: 0
+        });
+
+        const model = await PIXI.live2d.Live2DModel.from('https://cdn.jsdelivr.net/gh/guansss/pixi-live2d-display/test/assets/shizuku/shizuku.model.json');
+        app.stage.addChild(model);
+
+        model.scale.set(0.18);
+        model.x = window.innerWidth / 2;
+        model.y = window.innerHeight / 2 + 20;
+        model.anchor.set(0.5, 0.5);
+
+        window.addEventListener('pointermove', (e) => {
+          model.focus(e.clientX, e.clientY);
+        });
+      } catch (e) {
+        console.error(e);
+      }
+    });
+  </script>
+</body>
+</html>
