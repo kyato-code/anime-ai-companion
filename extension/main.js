@@ -7,14 +7,14 @@ document.addEventListener('DOMContentLoaded', () => {
   const pupilRight = document.getElementById('pupil-right');
   const catMouth = document.getElementById('cat-mouth');
 
-  // Logic 1: Mata Mengikuti Arah Kursor Mouse
+  // Gerakan Mata Mengikuti Mouse
   window.addEventListener('mousemove', (e) => {
     const rect = document.getElementById('avatar-container').getBoundingClientRect();
     const centerX = rect.left + rect.width / 2;
     const centerY = rect.top + rect.height / 2;
 
     const angle = Math.atan2(e.clientY - centerY, e.clientX - centerX);
-    const distance = Math.min(6, Math.hypot(e.clientX - centerX, e.clientY - centerY) / 20);
+    const distance = Math.min(4, Math.hypot(e.clientX - centerX, e.clientY - centerY) / 30);
 
     const moveX = Math.cos(angle) * distance;
     const moveY = Math.sin(angle) * distance;
@@ -23,23 +23,23 @@ document.addEventListener('DOMContentLoaded', () => {
     pupilRight.setAttribute('transform', `translate(${moveX}, ${moveY})`);
   });
 
-  // Logic 2: Animasi Mulut Bergerak Saat Ngomong
+  // Animasi Mulut Berbicara
   function startTalking() {
     let open = false;
     const talkInterval = setInterval(() => {
       open = !open;
       if (open) {
-        catMouth.setAttribute('d', 'M 138 156 Q 150 175 162 156 Z');
+        catMouth.setAttribute('d', 'M 144 146 Q 150 156 156 146 Z');
         catMouth.setAttribute('fill', '#ffb7c5');
       } else {
-        catMouth.setAttribute('d', 'M 138 156 Q 144 162 150 156 Q 156 162 162 156');
+        catMouth.setAttribute('d', 'M 144 146 Q 150 150 156 146');
         catMouth.setAttribute('fill', 'none');
       }
     }, 150);
 
     return () => {
       clearInterval(talkInterval);
-      catMouth.setAttribute('d', 'M 138 156 Q 144 162 150 156 Q 156 162 162 156');
+      catMouth.setAttribute('d', 'M 144 146 Q 150 150 156 146');
       catMouth.setAttribute('fill', 'none');
     };
   }
@@ -63,7 +63,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const loadingDiv = document.createElement('div');
     loadingDiv.classList.add('message', 'bot-message');
     loadingDiv.id = 'loading-msg';
-    loadingDiv.innerText = 'Kucing lagi mikir...';
+    loadingDiv.innerText = 'Ngetik balasan...';
     chatHistory.appendChild(loadingDiv);
     chatHistory.scrollTop = chatHistory.scrollHeight;
 
@@ -80,12 +80,10 @@ document.addEventListener('DOMContentLoaded', () => {
       document.getElementById('loading-msg')?.remove();
       
       appendMessage('bot', data.reply);
-      
-      // Animasi mulut ngomong selama 2.5 detik saat membalas
       setTimeout(() => stopTalking(), 2500);
     } catch (err) {
       document.getElementById('loading-msg')?.remove();
-      appendMessage('bot', 'Meow... Backend offline.');
+      appendMessage('bot', 'Backend offline.');
       stopTalking();
     }
   }
