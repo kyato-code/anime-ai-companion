@@ -19,14 +19,13 @@ class ChatRequest(BaseModel):
 async def chat(req: ChatRequest):
     msg = req.message.lower()
     
-    # Logika balasan santai & ramah
     if "siapa nama" in msg or "nama kamu" in msg:
-        reply = "Namaku Hikari! Kucing AI yang siap nemenin kamu ngoding sambil minum kopi ☕"
+        reply = "Namaku Hikari! Kucing AI yang siap nemenin kamu browsing dan nyari informasi ☕✨"
     elif "halo" in msg or "hi" in msg or "p" in msg:
-        reply = "Halo juga! Ada yang mau ditanyain atau butuh temen ngobrol?"
+        reply = "Halo juga! Ada hal menarik yang lagi kamu cari atau mau didiskusiin?"
     elif "lagi apa" in msg:
-        reply = "Lagi minum kopi sambil merhatiin kamu ngoding nih~ Meow!"
+        reply = "Lagi minum kopi sambil nemenin kamu internetan nih~ Meow!"
     else:
-        reply = f"Meow~ Soal '{req.message}', aku mengerti! Ada lagi yang mau dibahas?"
+        reply = f"Meow~ Soal '{req.message}', aku mengerti! Ada lagi yang mau kamu tanyakan?"
         
     return {"reply": reply}
