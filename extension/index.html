@@ -2,29 +2,35 @@
 <html lang="id">
 <head>
   <meta charset="UTF-8">
-  <title>Anime AI Companion</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Hikari - Anime AI Companion</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <div id="companion-container">
-    <div id="avatar-container">
-      <div class="character-card">
-        <img id="bg-cat" src="assets/cat.jpg" alt="Cat Companion" />
-        <canvas id="eye-canvas"></canvas>
+  <main id="app">
+    <header class="topbar">
+      <div class="status" id="status" title="Menghubungkan ke backend...">
+        <span class="dot" id="status-dot"></span>
+        <strong>Hikari</strong>
+        <small id="status-text">Menghubungkan...</small>
       </div>
-    </div>
+      <button id="reset-btn" class="icon-btn" type="button"
+              title="Mulai obrolan baru" aria-label="Mulai obrolan baru">&#x21BA;</button>
+    </header>
 
-    <!-- Chat Box UI -->
-    <div id="chat-history">
-      <div class="message bot-message">
-        <span>Halo! Aku siap nemenin kamu browsing dan cari info apa aja hari ini! ☕✨</span>
-      </div>
-    </div>
+    <section class="character-card" aria-hidden="true">
+      <img id="bg-cat" src="assets/cat.jpg" alt="">
+      <canvas id="eye-canvas"></canvas>
+    </section>
+
+    <section id="chat-history" role="log" aria-live="polite" aria-label="Riwayat obrolan"></section>
 
     <div id="chat-input-area">
-      <input type="text" id="user-input" placeholder="Ketik pesan untuk Kucing..." />
-      <button id="send-btn">Kirim</button>
+      <input type="text" id="user-input" maxlength="2000" autocomplete="off"
+             placeholder="Ketik pesan untuk Hikari..." aria-label="Pesan">
+      <button id="send-btn" type="button">Kirim</button>
     </div>
-  </div>
+  </main>
   <script src="main.js"></script>
 </body>
+</html>

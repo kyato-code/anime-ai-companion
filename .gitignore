@@ -1,0 +1,19 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+pyvenv.cfg
+.pytest_cache/
+
+# Rahasia / konfigurasi lokal
+.env
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# Hasil build
+*.zip

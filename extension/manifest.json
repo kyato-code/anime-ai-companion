@@ -1,10 +1,27 @@
 {
   "manifest_version": 3,
   "name": "Anime AI Companion",
-  "version": "1.0",
-  "description": "Asisten AI Karakter Anime",
+  "version": "1.1.0",
+  "description": "Hikari, teman AI berwujud kucing anime di popup browser kamu.",
   "action": {
-    "default_popup": "index.html"
+    "default_popup": "index.html",
+    "default_title": "Ngobrol dengan Hikari",
+    "default_icon": {
+      "16": "icons/icon16.png",
+      "32": "icons/icon32.png",
+      "48": "icons/icon48.png",
+      "128": "icons/icon128.png"
+    }
   },
-  "permissions": []
+  "icons": {
+    "16": "icons/icon16.png",
+    "32": "icons/icon32.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  },
+  "host_permissions": [
+    "http://localhost:8000/*",
+    "http://127.0.0.1:8000/*"
+  ],
+  "minimum_chrome_version": "102"
 }

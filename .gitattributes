@@ -1,0 +1,10 @@
+# Normalisasi line ending (Windows <-> Linux) supaya diff tidak berisik
+* text=auto eol=lf
+*.bat text eol=crlf
+
+# File biner
+*.jpg  binary
+*.png  binary
+
+# Library pihak ketiga: jangan tampilkan di diff / statistik bahasa
+*.min.js -diff linguist-vendored
